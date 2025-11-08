@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+body{
+    background-color: aquamarine;
+    font-family: "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+}
+
+#index{
+    text-align: center;
+}
+
+#page{
+    padding-left: 50px;
+}
+#page p{
+    padding-left: 60px;
+}
+
+footer{
+    background-color: darkcyan;
+    color: whitesmoke;
+    position: fixed;
+    bottom: 0;
+    left: -10px;
+    width: 101%;
+}
+
+#fManu{
+    list-style: none;
+    text-align: center;
+}
+
+#fManu li{
+    margin: 10px;
+    display: inline;
+}
+
+#CR{
+    text-align: center;
+}
