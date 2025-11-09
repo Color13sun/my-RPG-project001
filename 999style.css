@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+body{
+    background-color: aquamarine;
+    font-family: "Potta One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    padding-left: 10px;
+}
+
+.font175{font-size: 175%;}
+.font125{font-size: 125%;}
+.font105{font-size: 105%;}
+.font095{font-size: 95%;}
+.font050{font-size: 50%;}
+
+#index{
+    text-align: center;
+    padding-left: 0;
+}
+
+.space{padding-left: 60px;}
+
+.border01 {
+    width: 90%;
+    background-image: repeating-linear-gradient(90deg, #000000, #000000 15px, transparent 15px, transparent 19px);
+    background-position: left top;
+    background-repeat: repeat-x;
+    background-size: 2.5% 2px;
+}
+
+.data h2{
+    font-size: 175%;
+}
+
+.data dl{
+    margin-top: -15px;
+    margin-bottom: -15px;
+}
+
+.data dt{
+    font-size: 135%;
+    font-weight: 1000;
+    padding-bottom: 1px;
+}
+
+.data dd{
+    font-size: 115%;
+    padding-bottom: 7px;
+}
+
+footer{
+    background-color: darkcyan;
+    color: whitesmoke;
+    position: fixed;
+    bottom: 0;
+    left: -10px;
+    width: 101%;
+}
+
+#fManu{
+    list-style: none;
+    text-align: center;
+}
+
+#fManu li{
+    margin: 10px;
+    display: inline;
+}
+
+#CR{
+    text-align: center;
+}
