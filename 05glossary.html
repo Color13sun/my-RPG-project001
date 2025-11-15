@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>設定資料集・エントリ一覧</title>
+        <meta name="description" content="サイト概要説明">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- [if lt IE 9] -->
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <!-- [endif] -->
+        <!-- Google font setup -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+        <!-- Google font set -->
+        <link rel="stylesheet" href="styles.css">
+        <script src="data.js"></script>
+    <style>
+        /* styles.cssの内容と競合しないよう、検索コントロールのスタイルをここで一時的に定義 */
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #ececec;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .controls input[type="text"], .controls select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .controls label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        【自作ＲＰＧ（タイトル未定）】 - 設定資料集 📖
+    </header>
+
+    <div class="container">
+        <h1>📚 設定資料 エントリ一覧</h1>
+        <a href="00index.html" class="back-link">🏠️ ホームページに戻る</a>
+
+        <div class="controls">
+            <div>
+                <label for="search-input">単語検索:</label>
+                <input type="text" id="search-input" placeholder="名前、読みを入力" oninput="renderTable()">
+            </div>
+            
+            <div>
+                <label for="category-select">カテゴリー:</label>
+                <select id="category-select" onchange="renderTable()">
+                    </select>
+            </div>
+        </div>
+
+        <table id="entry-list-table">
+            <thead>
+                <tr>
+                    <th>単語</th>
+                    <th>読み</th>
+                    <th>カテゴリー</th>
+                    <th>概要</th>
+                </tr>
+            </thead>
+            <tbody id="entry-tbody">
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        &copy; 2025 【Color-sun】　All Rights Reserved.
+    </footer>
+
+    <script>
+        const tbody = document.getElementById('entry-tbody');
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+
+        /**
+         * 1. カテゴリー選択肢を生成する
+         */
+        function setupCategorySelect() {
+            // 全てのカテゴリー配列をフラット化し、重複を削除
+            const allCategories = SETTING_DATA.flatMap(item => item.category);
+            const categories = [...new Set(allCategories)].sort();
+
+            categorySelect.innerHTML = '';
+
+            // 「全て表示」のオプションを追加
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.textContent = '全て表示';
+            categorySelect.appendChild(allOption);
+
+            // 各カテゴリーのオプションを追加
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+        }
+
+
+        /**
+         * 2. データをフィルタリング、並び替え、HTMLテーブルに反映させる
+         */
+        function renderTable() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedCategory = categorySelect.value;
+
+            // 1. フィルタリング
+            let filteredData = SETTING_DATA.filter(item => {
+                // A. キーワード検索フィルタ
+                const matchesSearch = searchTerm === '' || 
+                                      item.word.toLowerCase().includes(searchTerm) || 
+                                      item.reading.toLowerCase().includes(searchTerm);
+                
+                // B. カテゴリーフィルタ
+                const matchesCategory = selectedCategory === 'all' || 
+                                        item.category.includes(selectedCategory);
+
+                // 両方の条件を満たすもののみ残す
+                return matchesSearch && matchesCategory;
+            });
+
+            // 2. 五十音順で並び替える
+            filteredData.sort((a, b) => a.reading.localeCompare(b.reading, 'ja'));
+
+            // 3. テーブルの描画
+            tbody.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                const emptyRow = tbody.insertRow();
+                const cell = emptyRow.insertCell();
+                cell.colSpan = 4;
+                cell.style.textAlign = 'center';
+                cell.textContent = '該当するエントリが見つかりませんでした。';
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const row = tbody.insertRow();
+                const link = document.createElement('a');
+                link.href = `detail.html?id=${item.id}`;
+                link.textContent = item.word;
+                
+                row.insertCell().appendChild(link);
+                row.insertCell().textContent = item.reading;
+                row.insertCell().textContent = item.category.join(' / ');
+                row.insertCell().textContent = item.meaning.join('');
+            });
+        }
+
+        // ページロード時の初期実行
+        setupCategorySelect(); // カテゴリー選択肢を準備
+        renderTable();         // 最初の表示を実行
+    </script>
+</body>
+</html>

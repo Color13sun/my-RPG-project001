@@ -1,0 +1,162 @@
+@charset "UTF-8";
+
+body { 
+    font-family: "Hachi Maru Pop", cursive;
+    margin: 0;
+    background-color: white;
+    color: #333;
+}
+
+header {
+    background-color: mediumseagreen;
+    color: #fff;
+    padding: 15px 20px;
+    font-size: 1.5em;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color:whitesmoke;
+    min-height: 80vh;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.container caption {
+    margin-top: 10px; 
+    line-height: 1.5;
+    font-size: large;
+    text-align: left;
+}
+
+.container th { color: forestgreen; }
+
+/* --- 共通コンポーネント --- */
+
+h1 { 
+    color: darkgreen; 
+    border-bottom: 3px solid darkgreen; 
+    padding-bottom: 5px;
+    margin-bottom: 30px;
+}
+
+h2 { 
+    border-bottom: 1px solid #ddd; 
+    margin-top: 30px; 
+    padding-bottom: 5px; 
+    color: #555;
+}
+
+a { 
+    text-decoration: none; 
+    color: #007bff; 
+}
+a:hover { 
+    text-decoration: underline; 
+}
+
+span {
+    color: darkgray;
+    text-decoration: line-through;
+    text-decoration-color: darkgray;
+    text-decoration-style: double;
+}
+
+/* --- テーブルスタイル (一覧ページ) --- */
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px; 
+}
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 12px; 
+    text-align: left; 
+}
+th { 
+    background-color: #e0e0e0; 
+    font-weight: bold;
+}
+
+/* 基本能力値テーブルのスタイル */
+.stats-table {
+    width: 100%; /* 横幅を調整 */
+    margin: 20px 0;
+    border: 2px solid dimgray; /* メインカラーの枠線 */
+}
+
+.stats-table caption {
+    caption-side: top;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px 0 5px 0;
+    color: #333;
+}
+
+.stats-table th {
+    background-color: #fce2c4; /* 薄い背景色 */
+    color: #de987c;
+    text-align: left;
+}
+
+.stats-table td {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* --- 詳細ページ固有スタイル --- */
+
+.back-link { 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    font-size: 1.1em;
+}
+
+.info-box { 
+    /* display: flex; 
+    align-items: flex-start; */
+    gap: 30px; 
+    margin-bottom: 30px; 
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 6px;
+}
+.info-box img { 
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 100%; 
+    height: auto; 
+    border: 4px solid #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+dl { width: 100%; }
+
+dl dt { 
+    font-weight: bold; 
+    color: forestgreen; 
+    margin-top: 10px; 
+    line-height: 1.5;
+}
+dl dd { 
+    margin-left: 0;
+    padding-left: 10px;
+    margin-bottom: 15px; 
+    border-left: 3px solid #ccc;
+}
+
+footer {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    padding: 15px;
+    background-color: darkseagreen;
+    color: whitesmoke;
+    font-size: 0.8em;
+    margin-top: 40px;
+}

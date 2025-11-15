@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>自作RPG設定資料集｜詳細ページ</title>
+        <meta name="description" content="サイト概要説明">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- [if lt IE 9] -->
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <!-- [endif] -->
+        <!-- Google font setup -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
+        <!-- Google font set -->
+        <link rel="stylesheet" href="styles.css">
+        <script src="data.js"></script>
+    </head>
+<body>
+    <header>
+        【自作ＲＰＧ（タイトル未定）】 - 設定資料集
+    </header>
+
+    <div class="container">
+        <a href="05glossary.html" class="back-link">← エントリ一覧に戻る</a> 🏠️
+        <a href="00index.html" class="back-link">ホームページに戻る</a>
+        
+
+        <div id="detail-content">
+            <p>エントリを読み込み中です...</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 【Color-sun】 All Rights Reserved.
+    </footer>
+
+    <script>
+        // ----------------------------------------------------
+        // 外部ファイルから読み込むデータ構造のキーを日本語表示名に変換するマップ
+        // ----------------------------------------------------
+        const detailKeyMap = {
+            // 必要に応じてキーと日本語表示名を追加してください
+            'castra': '陣営',
+            'attributum': '魔法属性',
+            'magicum': '基本魔法',
+            'affectiones': '基本感情',
+            'munus': '役割',
+            'lex': '法則',
+            'mana': '魔那',
+            'bellum': '武術',
+            'telum': '武器',
+            'fides': '信仰について',
+            'potestas': '司る力',
+            'adventus': '降臨について',
+            'belletcalam': '天穹の終熄（審判）について',
+            'sacraCaelum': '聖天暦について',
+            'ptolemaica': '星辰暦について',
+            'divisioMundi': '世界の分断について',
+            '': '',
+            '': '',
+            '': '',
+        };
+
+        // URLパラメータからIDを取得
+        function getEntryIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id'); 
+        }
+
+        // IDに基づいてデータを検索
+        function findEntryData(id) {
+            // SETTING_DATAはdata.jsで定義されています
+            return SETTING_DATA.find(item => item.id === id);
+        }
+
+        // データをHTMLに反映させるメイン関数
+        function renderDetailPage() {
+            const entryId = getEntryIdFromUrl();
+            const data = findEntryData(entryId);
+            const contentDiv = document.getElementById('detail-content');
+
+            if (!data) {
+                contentDiv.innerHTML = 
+                    '<h1>エラー: エントリが見つかりません</h1><p>指定された設定資料は存在しません。</p>';
+                document.title = "エラー";
+                return;
+            }
+
+            // ページタイトルを単語名に設定
+            document.title = `設定資料 - ${data.word}`;
+            
+            // ------------------------------------
+            // HTMLコンテンツを動的に生成
+            // ------------------------------------
+            
+            // --- 単一データ (details) の処理 ---
+            let detailItems = '';
+            
+            Object.entries(data.details).forEach(([key, value]) => {
+                if (key === 'fullDescription' || key === 'image') return; 
+
+                const displayKey = detailKeyMap[key] || key; 
+                detailItems += `<dt>${displayKey}</dt><dd>${value}</dd>`;
+            });
+
+            // --- 複数データ (detailsArray) の処理 ---
+            if (data.detailsArray) {
+                Object.entries(data.detailsArray).forEach(([key, [valueArray, delimiter]]) => {
+                    if (!Array.isArray(valueArray) || valueArray.length === 0) return;
+
+                    const displayKey = detailKeyMap[key] || key; 
+                    
+                    // 配列を結合し、<dd>タグを一つ生成 (delimiter: <br>または / など)
+                    const combinedValue = valueArray.join(delimiter);
+                    
+                    detailItems += `<dt>${displayKey}</dt><dd>${combinedValue}</dd>`;
+                });
+            }
+            /*
+            // details内のその他の情報をdt/ddとして整形
+            const detailItems = Object.entries(data.details).map(([key, value]) => {
+                // fullDescriptionとimageはここで除外し、後で個別に表示
+                if (key === 'fullDescription' || key === 'image') return ''; 
+
+                // マップを使って日本語の表示名を取得。マップにない場合は元のキーを使用
+                const displayKey = detailKeyMap[key] || key; 
+
+                // ★修正ポイント2: value が配列かどうかをチェックするロジック★
+                if (Array.isArray(value)) {
+                    // 値が配列の場合、配列の各要素に対して <dd> を生成
+                    const ddItems = value.map(item => `<dd>${item}</dd>`).join('');
+            
+                    // 最初の <dd> の前に <dt> を一つだけ追加し、残りの <dd> は <dt> の後に続ける
+                    return `<dt>${displayKey}</dt>${ddItems}`;
+                } else {
+                    // 値が文字列（または単一の値）の場合、通常通り <dt> と <dd> を一つずつ生成
+                    return `<dt>${displayKey}</dt><dd>${value}</dd>`;
+                }
+            }).join('');
+            */
+            const formattedDate = new Date(data.updatedAt).toLocaleDateString('ja-JP', { 
+                year: 'numeric', month: '2-digit', day: '2-digit'
+            });
+
+            // ------------------------------------
+            // 表 (stats) のHTMLを生成するロジック★
+            // ------------------------------------
+            let statsTableHtml = '';
+    
+            // データ（stats）とヘッダー（statHeaders）の両方が存在するかチェック
+            if (data.stats && data.stats.length > 0 && data.statHeaders && data.statHeaders.length > 0) {
+                
+                // 1. ヘッダー行を生成
+                const headerRow = data.statHeaders.map(header => 
+                    `<th>${header}</th>`
+                ).join('');
+
+                // 2. データ行を生成
+                // 各データ配列 (例: [15, "HP", 1250]) をHTMLの<td>の行に変換
+                const tbodyContent = data.stats.map(statRow => {
+                    // データ行内の各要素を<td>タグに変換
+                    const cells = statRow.map(cellData => 
+                        `<td>${cellData !== null ? cellData : ''}</td>` // nullは空欄に
+                    ).join('');
+                    return `<tr>${cells}</tr>`;
+                }).join('');
+
+                // 3. 全体を組み立て
+                statsTableHtml = `
+                    <table class="stats-table">
+                        ${data.statTitle ? `<caption>${data.statTitle}</caption>` : ''}
+                        <thead>
+                            <tr>${headerRow}</tr>
+                        </thead>
+                        <tbody>
+                            ${tbodyContent}
+                        </tbody>
+                    </table>
+                `;
+            }
+            // ------------------------------------
+
+
+            let html = `
+                <h1>${data.word} (${data.reading})</h1>
+                
+                <div class="info-box">
+                    ${data.details.image ? `<img src="${data.details.image}" alt="${data.word}の画像">` : '<div>[画像なし]</div>'}
+                    
+                    <dl>
+                        <dt>カテゴリー</dt>
+                        <dd>${data.category.join(' / ')}</dd>
+                        <dt>概要</dt>
+                        <dd>${data.meaning.join('')}</dd>
+                        <dt>最終更新日</dt>
+                        <dd>${formattedDate}</dd>
+                        
+                        <h2>基本情報</h2>
+                        ${detailItems}
+                    </dl>
+                    ${statsTableHtml}
+                </div>
+                
+                <h2>背景・解説</h2>
+                <p>${data.details.fullDescription.join('')}</p>
+            `;
+
+            contentDiv.innerHTML = html;
+        }
+
+        // ページロード時に実行
+        renderDetailPage();
+    </script>
+</body>
+</html>
