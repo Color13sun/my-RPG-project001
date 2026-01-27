@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
         <!-- Google font set -->
         <link rel="stylesheet" href="styles.css">
-        <script src="data.js"></script>
+        <script src="char_data.js"></script>
     </head>
 <body>
     <header>
@@ -23,7 +23,7 @@
     </header>
 
     <div class="container">
-        <a href="05terminology.html" class="back-link">← エントリ一覧に戻る</a> 🏠️
+        <a href="04char_list.html" class="back-link">← 一覧に戻る</a> 🏠️
         <a href="00index.html" class="back-link">ホームページに戻る</a>
     
         <div class="pagetop">
@@ -33,10 +33,9 @@
         </div>
         <button id="modeToggle">🌙 ダークモード</button>
         <script src="darkmode.js"></script>
-        
 
         <div id="detail-content">
-            <p>読み込み中...</p>
+            <p>エントリを読み込み中です...</p>
         </div>
     </div>
 
@@ -47,16 +46,6 @@
     <script>
         const detailKeyMap = {
             // 共通項目マップ
-            'trueIde': '正体：',
-            'traits': '特性：',
-            'species': '種族：',
-            'app': '外見：',
-            'jpb': '職業：',
-            'personality': '性格：',
-            'origin': '由来：',
-            'role': '役割：',
-            'intention': '意図：',
-            'example': '例：',
             '': '',
             '': '',
         };
@@ -135,7 +124,7 @@
                     const sectionId = `section-${index}`;
                     indexItems.push({ id: sectionId, title: displayName });
                     dynamicContentHtml += 
-                        `</dl><h2 id="${sectionId}">${displayName}</h2><dl>`;
+                        `</dl><h2 id="$[sectionId]">${displayName}</h2><dl>`;
                 } else if (isNoLabel) {
                     // 見出しなし：ddタグのみを出力
                     dynamicContentHtml += 

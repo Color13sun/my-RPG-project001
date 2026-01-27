@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>自作RPG設定資料集｜ゲームシステム</title>
+    <meta name="viewport" content="wisummaryh=device-wisummaryh, initial-scale=1.0">
+    <!-- [if lt IE 9] -->
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <!-- [endif] -->
+    <!-- 数式表示用Script -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Google font setup -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
+    <!-- Google font set -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header id="top">
+        【自作ＲＰＧ（タイトル未定）】 - 設定資料集
+    </header>
+
+    <div class="container">
+        <p>
+            <a href="04char_list.html">BACK</a>　
+            <a href="00index.html">HOME</a>　
+            <a href="06glossary.html">NEXT</a>
+        </p>
+
+        <h1>⚙️ 『クロノセフィア』ゲームシステムメモ</h1>
+
+        <p>
+            <a href="#one">１．変数 [var]</a>　
+            <a href="#two">２．アイテム [item]</a>　
+            <a href="#three">３．コモンイベント [CE]</a>　
+            <a href="#four">４．変数相関</a>　
+            <a href="#five">５．開発ノート</a>
+        </p>
+
+        <hr>
+
+        <p>　
+            RPGツクールへの設定をする用メモ
+        </p>
+
+        <div class="pagetop">
+            <a href="#top" title="ページの先頭に戻る">
+                <p class="box"><span>▲<br>PAGE<br>TOP</span></p>
+            </a>
+        </div>
+        <button id="modeToggle">🌙 ダークモード</button>
+        <script src="darkmode.js"></script>
+
+        <h2 id="one">１．変数詳細定義：『世界の物理定数』</h2>
+        <p>　ツクールの「変数」を、この世界の「物理的な状態」として定義。</p>
+        <dl>
+            <details><summary>　var[001]：一時変数（ Temporary Variables / \( V_t \) ）</summary>
+                <dd>　　一時的に数値を代入するための変数。</dd></details><br>
+            <details><summary>　var[002]：肉体安定度（ Physical Stability / \( S_p \) ）</summary>
+                <dd>
+                    　　「命」という抽象的な概念を、タンパク質と魔那の「結合維持率」として定義。
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>範囲：</b>\( 0 \sim 100 \% \)（初期値：\( 100 \)）
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>基本減衰：</b>フィールド移動中、\( 10 \)秒（\( 600 \)フレーム）ごとに \( -1 \, \)。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>加速要因：</b>特定の強力な魔法（励起率が高い術式）を使用すると、<!--
+                                -->廃熱により追加で \( -1 \sim -5 \) の即時ダメージ。
+                                </span></li>
+                                <li><span class="revert"><b>臨界点：</b>
+                                    <ul>
+                                        <li><span class="revert">
+                                            \( S_p \le 20 \)：<b>「共鳴ノイズ」</b>状態。<!--
+                                        -->画面が紫に歪み、メニュー開閉速度が低下。
+                                        </span></li>
+                                        <li><span class="revert">
+                                            \( S_p = 0 \)：「熱力学的死（自爆）」。<!--
+                                        -->肉体が形を維持できず霧散する。いわゆるゲームオーバー。
+                                        </span></li>
+                                    </ul>
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    複数の廃棄個体から継ぎ接ぎされた肉体を繋ぎ止めている「結合エネルギー」の強さ。
+                                </span></li>
+                                <li><span class="revert">
+                                    本来「使徒」は空観大陸からの「調律信号」でこの値が維持されるが、地上では<!--
+                                -->外部供給が途絶えているため、常にエントロピーが増大（崩壊）し続けている。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    HPとは別に管理される、真の寿命。プレイヤーに常に『薬を打たなければならない』<!--
+                                -->という強迫観念を与えるための変数。
+                                </span></li>
+                                <li><span class="revert">
+                                    序盤は減少速度をある程度速く設定し、プレイヤーに「抑制剤」の重要性を叩き込む。<!--
+                                -->中盤、研究により減少を緩和する装備を実装予定。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　var[003]：魔那励起率（ Mana Excitation Rate / \( E_x \) ）</summary>
+                <dd>
+                    　　手のひらの<ruby>魔那接続刻印<rt>マナ・コネクタ</rt></ruby>から放出される<!--
+                -->魔力の「質」と「出力」を定義。
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>初期値：</b>\( 100 \)（単位：\( W \) / ワット）
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>計算式への関与：</b>魔法ダメージ \( = \) 基礎威力 \( \times \: \: (E_x \; / \; 100) \)
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>変動：</b>抑制剤を使用すると一時的に上昇するが、肉体安定度が低いと、<!--
+                                -->出力にムラ（乱数幅）が生じる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>説明：</b>「<ruby>魔那接続刻印<rt>マナ・コネクタ</rt></ruby>」が周囲の魔素を<!--
+                                -->どれだけ激しく振動（励起）させられるかの指標。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>特徴：</b>異世界の論理で「最適化」された術式を通すことで、本来\( \, 100 \, \)前後で<!--
+                                -->頭打ちになるはずの出力が、\( \, 200 , \, 300 \, \)と異常な数値を叩き出すようになる。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>成長：</b>拠点の「研究」でこの変数の上限値を底上げできるようにする。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>状態異常「魔那酔い」：</b>短時間に魔法を使いすぎると付与されるデバフ。<!--
+                                -->肉体安定度の減少速度が「\( \, 2 \, \)」倍になる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    『攻撃力』という曖昧な言葉を使わず、常に『励起率』と呼称することで、<!--
+                                -->魔法を科学（物理）として扱う感覚を強調する。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　var[004]：異世界の知見（ Logic Awareness / \( L_a \) ）</summary>
+                <dd>
+                    　　主人公がこの世界の矛盾を観測するたびに蓄積される「生データ」。
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>微細な干渉：</b>合成を成功するごとに\( \, +2 \, \)、失敗するごとに<!--
+                                -->\( \, +1 \, \)、特定の「残骸」の解析で\( \, +5 \, \)されるなど、随時変動。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>成功率への寄与：</b>「\( 1 \, \% \)の奇跡」を\( 1.1 \% , \, 1.2 \% \)<!--
+                                -->と着実に積み上げるのは、この変数。
+                                </span></li>
+                                <li><span class="revert"><b>影響範囲：</b>
+                                    <ul>
+                                        <li><span class="revert">
+                                            <b>合成成功率：</b>基礎 \( 1 \, \% + L_a \)
+                                        </span></li>
+                                        <li><span class="revert">
+                                            <b>研究メニューの解禁：</b>\( L_a \, \)が一定値を超えるごとに、<!--
+                                        -->より高度な「抑制剤」や「強化パーツ」のレシピが解放される。
+                                        </span></li>
+                                    </ul>
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    「なぜこの世界は、あのアリストテレス的物理学で動いているのか？」という<!--
+                                -->疑問に対する、主人公なりの解答の積み重ね。
+                                </span></li>
+                                <li><span class="revert">
+                                    この値が高まるほど、主人公の眼には世界が「数式」の羅列として視認されるようになる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    ゲームの進行度（フラグ）を司る最も重要な変数。失敗すらも血肉にする<!--
+                                -->システムにすることで、１％の合成に挑み続ける意欲を維持される。
+                                </span></li>
+                                <li><span class="revert">
+                                    jsコマンド“$gameVariables.value(4)”をそのままダメージ計算式や<!--
+                                -->成功率のスクリプトに代入。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【獲得効率】（バランス指標）</b><br><span class="revert">
+                            　　レベルデザインの参考として、プレイヤーがどのように知見を稼ぐかの想定値。
+                            </span><ul>
+                                <li><span class="revert"><b>合成の試行：</b><ul>
+                                    <li>成功：\( +2 \)（知見の定義）</li>
+                                    <li>失敗：\( +1 \)（失敗データの収集）</li>
+                                </ul></span></li>
+                                <li><span class="revert"><b>ガラクタ漁り：</b><ul>
+                                    <li>通常ゴミ：\( 0 \sim +1 \)</li>
+                                    <li>未知の残骸（レア）：\( +5 \sim +10 \)</li>
+                                </ul></span></li>
+                                <li><span class="revert"><b>異世界の残滓（item[004]）：</b><ul>
+                                    <li>
+                                        使用：\( +50 \)（劇的な<a class="hover">パラダイムシフト<!--
+                                    --><span class="hover_text">それまで当然とされてきた常識、<!--
+                                    -->ものの見方、価値観、思考様式などが、根本から劇的に変化すること。</a>）
+                                    </li>
+                                </ul></span></li>
+                            </ul>
+                        </span></li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　var[005]：知見レベル（ Logic Protocol Level / \( L_{vl} \) ）</summary>
+                <dd>
+                    　　蓄積されたデータがある閾値を超え、「この世界の物理法則を完全にハックする新しい計算式」を<!--
+                -->構築した状態を指す。
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>不可逆な進化：</b>レベルが上がると、これまで作れなかった「高純度抑制剤」の<!--
+                                -->レシピが解放されるなど、ゲームのフェーズ（章）が進むトリガーとなる。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>ステータスの再定義：</b>知見レベルが上がるごとに、var[003]:魔那励起率<!--
+                                -->（攻撃力）の「成長限界」が引き上げられるような設計にすると、育成の楽しさが生まれる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    この変数の進展は、主人公がこの世界の「バグ（不条理）」をどれだけ<!--
+                                -->体系化したかを示すマイルストーン。
+                                </span></li>
+                                <li><span class="revert">
+                                    序盤は「生き残るための最低限の知識」としてサクサク上がり、<!--
+                                -->中盤以降は「神の領域へのハッキング」として要求数値が跳ね上がる<!--
+                                -->指数関数的な設計。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    もし var[004]\( \, \: \ge \, 100 \, \)ならば var[005]を\( \, 1 \, \)に、<!--
+                                -->もし var[004]\( \, \: \ge \, 300 \, \)ならば var[005]を\( \, 2 \, \)に<!--
+                                -->という判定を拠点（ラボ）に戻ったときに行う。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【レベルアップ設計】</b>
+                            <ol>
+                                <li><span class="revert">レベルアップ必要値と解禁要素
+                                    <table><thead><tr>
+                                        <th>知見<br>(\( \, Lv. \, \))</th><th>必要累計知見<br>var[004]</th>
+                                        <th>呼称<br>（プロトコル名）</th><th>解禁される研究・機能</th>
+                                    </tr></thead><tbody><tr>
+                                        <td>\( Lv.0 \)</td><td>\( 0 \)</td><td>未解析個体</td>
+                                        <td>基礎合成（成功率１％～）のみ実行可能。</td>
+                                    </tr><tr>
+                                        <td>\( Lv.1 \)</td><td>\( 100 \)</td><td>古典力学的解釈</td>
+                                        <td>成功率補正が実感し始める。<b>「抑制剤：改良型」のレシピ解禁。</b></td>
+                                    </tr><tr>
+                                        <td>\( Lv.2 \)</td><td>\( 300 \)</td><td>熱力学的安定論</td>
+                                        <td>安定度減少を\( 1.2 \)倍遅くする。<b>「内部冷却プラグイン」の作成。</b></td>
+                                    </tr><tr>
+                                        <td>\( Lv.3 \)</td><td>\( 700 \)</td><td>電磁相互作用の再定義</td>
+                                        <td>戦闘用術式（雷系魔法）の効率化。ガラクタ漁りの効率UP。</td>
+                                    </tr><tr>
+                                        <td>\( Lv.4 \)</td><td>\( 1,500 \)</td><td>量子確率論的介入</td>
+                                        <td>「１％の壁」を無視する特殊合成の解禁。強力な武具の生成。</td>
+                                    </tr><tr>
+                                        <td>\( Lv.5 \)</td><td>\( 3,100 \)</td><td>次元解析・時空記述</td>
+                                        <td>重力操作、時空間ハック（範囲魔法）。<b>「神の視点」</b>への到達(?)</td>
+                                    </tr><tr><td colspan="4">\( Lv.6 \, \)以降も実装予定。</td>
+                                    </tr></tbody></table>
+                                </span></li><br>
+                                <li><span class="revert">【実装メモ】レベルアップ判定ロジック
+                                    <table><tr><td>[JavaScript]<br></td></tr><tr><td>
+                                        /**<br>
+                                        * 知見レベルアップ判定プロトコル<br>
+                                        * 現在の累積知見(v[3])に基づき、レベル(v[11])を更新する。<br>
+                                        */<br>
+                                        let currentK = $gameVariables.value(3);<br>
+                                        let currentL = $gameVariables.value(11);<br>
+                                        let nextL = currentL;<br>
+                                        <br>
+                                        if      (currentK >= 3100) { nextL = 5; }<br>
+                                        else if (currentK >= 1500) { nextL = 4; }<br>
+                                        else if (currentK >= 700)  { nextL = 3; }<br>
+                                        else if (currentK >= 300)  { nextL = 2; }<br>
+                                        else if (currentK >= 100)  { nextL = 1; }<br>
+                                        <br>
+                                        if (nextL > currentL) {<br>
+                                            $gameVariables.setValue(11, nextL);<br>
+                                            // レベルアップ演出<br>
+                                            AudioManager.playSe({ name: 'Up4', pan: 0, pitch: 100, volume: 100 });<br>
+                                            $gameMessage.setBackground(1);<br>
+                                            $gameMessage.setPositionType(1);<br>
+                                            $gameMessage.add(`【解析完了】論理階層が Lv.${nextL} へ深化しました。`);<br>
+                                            $gameMessage.add("新たな術式プロトコルが承認されました。");<br>
+                                        }<br>
+                                    </td></tr></table>
+                                </span></li>
+                            </ol>
+                        </li>
+                    </ul>
+                </dd></details>
+        </dl>
+        <br>
+        <h2 id="two">２．アイテム詳細定義：『地上の残滓と禁忌の成果物』</h2>
+        <p>　すべての合成品および一部の素材は、以下の５段階の成功階級と、２段階の失敗階級に分類される。</p>
+        <dl>
+            <details><summary>　アイテムデータベース：設定共通ルール</summary>
+                <dd><ul class="bulletGreen">
+                    <li><b>アイテムタイプ：</b>
+                        <span class="revert">
+                            基本的に「通常タイプ」に設定。
+                        </span></li>
+                    <li><b>消耗品：</b>
+                        <span class="revert">
+                            完成品は「はい」、素材は「いいえ」。
+                        </span></li>
+                    <li><b>使用可能時：</b>
+                        <span class="revert">
+                            完成品は「常時」または「メニュー画面」、素材は「使用不可」。
+                        </span></li>
+                    <li><b>範囲：</b>
+                        <span class="revert">
+                            回復系は「味方単体」、それ以外はなし。
+                        </span></li>
+                    <li><b>価格：</b>
+                        <span class="revert">
+                            基本的にTierが上がるごとに\( \, 10^{n} \, \)単位、あるいは倍数で増加。<!--
+                         -->ただし、Tier0や失敗品は売却不可のため「\( \, 0 \, \)」に設定。
+                        </span></li>
+                </ul><p class="FC-Gr">◆ アイテム品質等級表 ◆</p><ol class="bulletGreen">
+                    <li><b>成功階級：論理の洗練</b><span class="revert">
+                        <ul><li><b>Tier１：</b>試作型／粗悪品（Lower）
+                            <ul><li>
+                                <b>概念：</b>暫定的な論理構築による、成功最低ライン。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#888888"><!--
+                            --> 灰色 (#888888) </font></mark>。不純物が多く、不安定な状態。
+                            </li></ul></li></ul>
+                        <ul><li><b>Tier２：</b>調整型／標準品（Standard）
+                            <ul><li>
+                                <b>概念：</b>適切に精製され、一般に広く普及している品質。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#FFFFFF"><!--
+                            --> 白色 (#FFFFFF) </font></mark>。最も基準となる安定した状態。
+                            </li></ul></li></ul>
+                        <ul><li><b>Tier３：</b>安定型／上質品（High）
+                            <ul><li>
+                                <b>概念：</b>成分の衝突が制御され、副作用を克服した純度の高い品質。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#A335EE"><!--
+                            --> 紫色 (#A335EE) </font></mark>。魔那の波形が整い始めている。
+                            </li></ul></li></ul>
+                        <ul><li><b>Tier４：</b>完成型／至高品（Master）
+                            <ul><li>
+                                <b>概念：</b>生体結合効率が理論限界に到達した、物理学的な極致。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#FFD700"><!--
+                            --> 金色 (#FFD700) </font></mark>。聖職者が「奇跡」と呼ぶレベルの純度。
+                            </li></ul></li></ul>
+                        <ul><li><b>Tier５：</b>超越型／特異品（Singular）
+                            <ul><li>
+                                <b>概念：</b>異世界の論理介入により、物理限界を超越した究極の形態。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#00FFFF"><!--
+                            --> 水色 (#00FFFF) </font></mark>。論理そのものが発光している。
+                            </li></ul></li></ul>
+                    </span></li>
+                    <li><b>失敗階級：論理の破綻</b><span class="revert">
+                        <ul><li><b>Tier\( \, \)-1：</b>欠陥型／汚濁品（Defective）
+                            <ul><li>
+                                <b>概念：</b>成功に僅かに届かなかった「成功寄りの失敗品」。
+                            </li><li>
+                                <b>性質：</b>狙った効果を得られるが、劇的な副作用を伴う。<!--
+                            -->だが、研究データとしては成功品よりも価値が高い。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#E2C6FF"><!--
+                            --> 薄紫色 (#E2C6FF) </font></mark>。
+                            </li></ul></li></ul>
+                        <ul><li><b>廃棄物：</b>焦げた汚泥（Burnt Sludge）
+                            <ul><li>
+                                <b>概念：</b>術式が暴走し、素材が炭化した完全な失敗作。
+                            </li><li>
+                                <b>性質：</b>アイテムとしての効力は皆無だが、<!--
+                            -->失敗のプロセスを解析することで僅かな知見が得られる。
+                            </li><li>
+                                <b>視覚：</b><mark class="mk-bk"><font color="#6F4B3E"><!--
+                            --> 焦茶色 (#6F4B3E) </font></mark>。
+                            </li></ul></li></ul>
+                    </span></li>
+                </ol></dd></details><br>
+            <details><summary>　item[001]～item[009]：予備</summary>
+                <dd><p>　　管理の都合上、一応開けておく予備欄。</p></dd></details><br>
+            <details><summary>　item[010]～item[019]：体力回復用薬草</summary>
+                <dd><ul class="bulletGreen">
+                    <li><b>【システム仕様】</b><ul>
+                        <li><span class="revert">
+                            <b>説明：</b><!--
+                        -->赤く瑞々しい実をつける野草。実以外の草の部分に生体修復成分を含み、<!--
+                        -->聖水と反応させることで「癒し薬」の原料となる。
+                        </span></li>
+                        <li><span class="revert">
+                            <b>分離：</b>合成素材。
+                        </span></li>
+                        <li><span class="revert">
+                            <b>用途：</b>「癒し薬」合成の主原料。
+                        </span></li>
+                        <li><span class="revert">
+                            <b>Tierごとの設定：</b>
+                            <table><thead><tr>
+                                <th>ID</th><th>等級　　</th><th>名称</th><th>価格</th><th>説明文</th>
+                                <th>\(L_a\)</th><th>設定・仕様</th>
+                            </tr></thead><tbody><tr>
+                                <td>010</td><td>Tier-1</td><td><ruby>歪雫草<rt>ゆがしずくそう</rt></ruby></td>
+                                <td>0</td><td>\C[6]【T0】\C[0]異常増殖した赤雫草。合成に使うと論理を<!--
+                                 -->汚染し失敗を招くが、過剰修復のバグデータとして研究価値は極めて高い。</td>
+                                <td>20</td><td>飢え人の死体からのみ採取可能。</td>
+                            </tr><tr>
+                                <td>011</td><td>Tier1</td><td><ruby>枯雫草<rt>かれしずくそう</rt></ruby></td>
+                                <td>8</td><td>\C[8]【T1】\C[0]成分が枯れかけた赤雫草。癒し薬の<!--
+                                 -->最低限の原料。生食すると喉を焼くほど苦く、回復量は微々たるもの。</td>
+                                <td>2</td><td>序盤のフィールド採取。</td>
+                            </tr><tr>
+                                <td>012</td><td>Tier1</td><td><ruby>枯雫草<rt>かれしずくそう</rt></ruby></td>
+                                <td>8</td><td>\C[8]【T1】\C[0]成分が枯れかけた赤雫草。癒し薬の<!--
+                                 -->最低限の原料。生食すると喉を焼くほど苦く、回復量は微々たるもの。</td>
+                                <td>2</td><td>序盤のフィールド採取。</td>
+                            </tr></tbody></table>
+                        </span></li>
+                    </ul></li>
+                    <li><b>【世界観設定】</b><ul class="bullet_none">
+                        <li><span class="revert">
+                            　地上の至る所に自生する生命力の象徴。赤く瑞々しい実をつけるが、<!--
+                         -->この実は人類にとって「必要以上の回復（過剰修復）」をもたらすため、<!--
+                         -->摂取すれば肉体がそのエネルギーに耐えきれず崩壊する猛毒となる。<!--
+                         -->致死量は豆粒ほどのサイズでありながら、わずか1個半という恐ろしさを誇る。<br>
+                            　一方で、実は甘くて非常に美味しいとされており、その誘惑が犠牲者を絶やさない。<!--
+                         -->人類が安全に利用できる回復成分は実以外の草・茎の部分に集中しているが、<!--
+                         -->こちらは生で食べると非常に苦く、その苦痛に見合うだけの回復量（微量）も<!--
+                         -->得られない。そのため、主に聖水を用いた精製プロセスの素材として扱われる。<br>
+                            　最新の研究によれば、本来「猛毒」とされる実と「薬」となる草の両方を適切に<!--
+                         -->調合・材料として用いることで、単なる癒し薬を遥かに凌駕する<!--
+                         -->極めて高い回復効果を得られることが示唆されている。
+                        </span></li>
+                    </ul></li>
+                    <li><b>【開発ノート】</b><ul class="bullet_none">
+                        <li><span class="revert">
+                            　アイコンは「赤い実がついた緑の草」。<!--
+                         -->テキスト内で「実の誘惑（死）」と「草の苦味（生）」を対比させる。<!--
+                         -->知見レベル (\( L_{vl} \)) 上昇時、この「毒の実」から<!--
+                         -->過剰なエネルギーを安全に抽出し草の成分と統合する特殊レシピを解禁し、<!--
+                         -->上位抑制剤や最高級回復薬の核として再定義させる。
+                        </span></li>
+                    </ul></li>
+                </ul></dd></details><br>
+            <details><summary>　item[002]：結晶化した魔那（ Crystallized Mana / \( M_c \) ）</summary>
+                <dd>
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>説明：</b><!--
+                                -->【合成素材】高密度の魔那が個体化した紫色の結晶。<!--
+                                -->物質の結合状態を書き換えるための、強力な励起エネルギー源。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>分離：</b>合成素材／触媒
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>入手先：</b>魔空生物の核、特定の機械の残骸
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>用途：</b>「抑制剤」合成の触媒（エネルギー源）
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    過剰な魔那が物理的な圧力を受け、個体化したもの。<!--
+                                -->紫色の鋭い輝きを放つ小石。
+                                </span></li>
+                                <li><span class="revert">
+                                    魔力に対する「着火剤」としての性能が極めて高く、これの質が合成の<!--
+                                -->成功率を左右するが、不安定なものは触れるだけで爆発する危険を孕んでいる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    アイコンは「紫色の結晶」。
+                                </span></li>
+                                <li><span class="revert">
+                                    貴重品ではないが、残渣に比べて入手難易度を少し上げ、<!--
+                                -->リソース管理の対象にする。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　item[003]：抑制剤：試作型（ Suppressant: Proto / \( S_p \)-\( 1 \) ）</summary>
+                <dd>
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>説明：</b><!--
+                                -->【消費材】肉体安定度を\( \, 30 \% \, \)回復。服用時に強烈な苦痛を伴い、<!--
+                                -->副作用として一定時間、魔那励起率（魔法出力）が僅かに低下する。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>分離：</b>消費アイテム
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>効果：</b>var[002]:肉体安定度を\( \, 30 \% \, \)回復。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>副作用：</b>使用時に「魔那励起率」が\( 10 \)ターンの間<!--
+                                -->\( \, 5 \, \% \, \)低下（不純物による出力低下）。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    主人公が異世界の論理で、残渣（タンパク質）を魔那（エネルギー）で無理やり<!--
+                                -->再重合させた液体。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>味・感覚：</b>焦げたゴムのような悪臭と、喉を焼くような強烈な苦味。服用すると<!--
+                                -->心臓が激しく脈動し、崩壊しかけていた細胞が悲鳴を上げながら「固定」される。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    アイコンは「濁った紫色の液体が入った試験管」。
+                                </span></li>
+                                <li><span class="revert">
+                                    単なる「回復アイテム」としてではなく、<b>「死なないために不快なものを飲む」</b><!--
+                                -->という感覚をメッセージや演出で表現する。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　item[004]：異世界の残滓（ Anomalous Memory / \( A_m \) ）</summary>
+                <dd>
+                    <ul class="bulletGreen">
+                        <li><b>【システム仕様】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>説明：</b><!--
+                                -->【特殊解析】異世界の論理体系が記録された記録媒体。解析することで<!--
+                                -->「異世界の知見」が\( \, 5 \, \)上昇し、新たな研究が可能になる。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>分離：</b>消費アイテム（貴重品）
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>効果：</b>var[004]:異世界の知見を\( \, +5 \, \)上昇させる。
+                                </span></li>
+                                <li><span class="revert">
+                                    <b>入手先：</b>隠し宝箱、極めて稀にガラクタ漁りで見つかる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    この世界の住人には「無意味なガラクタ」にしか見えないが、主人公には<!--
+                                -->「かつての物理教科書」や「論理演算の断片」として視認される特異物。
+                                </span></li>
+                                <li><span class="revert">
+                                    解析（使用）することで、この世界の物理定数をハックするための新たな計算式が<!--
+                                -->脳内に書き込まれる。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【開発ノート】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    アイコンは「ノイズが走った本」または「壊れた基盤」。
+                                </span></li>
+                                <li><span class="revert">
+                                    レベルアップアイテムとしての役割。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details>
+        </dl>
+        <br>
+        <h2 id="three">３．コモンイベント詳細定義：『世界を駆動する<ruby>論理の律動<rt>プロトコル</rt></ruby>』</h2>
+        <dl>
+            <details><summary>　CE[001]：【生体維持】エントロピー減衰サイクル</summary>
+                <dd>
+                    　　プレイヤーに常に付きまとう「時間制限」と「死の気配」を制御。
+                    <ul class="bulletGreen">
+                        <li><b>トリガー：</b><span class="revert">
+                            並列処理（スイッチ[001]：ゲーム開始　ON時）
+                        </span></li>
+                        <li><b>ロジック構造：</b>
+                            <ol>
+                                <li><span class="revert"><b>待機：</b>\( 600 \)フレーム（\( 10 \)秒相当）。</span></li>
+                                <li><span class="revert"><b>演算：</b>var[002]:肉体安定度を\( \, -1 \, \)。</span></li>
+                                <li><span class="revert"><b>状態チェック：</b>
+                                    <ul>
+                                        <li>もし var[002] \( \le \) \( 20 \) なら：【警告】
+                                            <ul class="open_circle">
+                                                <li>画面の色調変更（紫がかった暗い色へ）。</li>
+                                                <li>SEの演奏（心音・微弱なノイズ音）。</li>
+                                            </ul>
+                                        </li>
+                                        <li>もし var[002] \( \le \) \( 0 \) なら：【臨界】
+                                            <ul class="open_circle">
+                                                <li>コモンイベント【緊急：肉体自壊】を呼び出す。</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </span></li>
+                            </span></ol>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    　「使徒」の肉体は本来、高密度の魔那環境下で維持されるように設計<!--
+                                -->されている。地上という低密度の魔那環境下では、<a class="hover"><!--
+                                --><span class="hover_text">熱は自発的に高温から低温へしか移動せず、<!--
+                                -->その逆は起こらないこと。自然現象の不可逆性</span>熱力学第二法則</a>に<!--
+                                -->従い、結合エネルギーが常に外部へ霧散し続ける。これを<b>「生体的<!--
+                                -->エントロピーの増大」</b>と呼ぶ。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　CE[002]：【探索】廃棄物からの略奪（スクラップ・ダイブ）</summary>
+                <dd>
+                    　　マップ上の「キラキラ」や「ガラクタの山」を調べた際の汎用処理。
+                    <ul class="bulletGreen">
+                        <li><b>トリガー：</b><span class="revert">
+                            なし（マップイベントから「コモンイベントの呼び出し」で実行）
+                        </span></li>
+                        <li><b>ロジック構造：</b>
+                            <ol>
+                                <li><span class="revert"><b>SE演出：</b>“Machine2”（ガサガサという音）を再生。</span></li>
+                                <li><span class="revert">
+                                    <b>変数操作：</b>var[001]:一時変数に\( 1 \sim 100 \)の乱数を代入。
+                                </span></li>
+                                <li><span class="revert"><b>条件分岐（ドロップテーブル）：</b>
+                                    <ul>
+                                        <li>\( 1 \sim 60 \)：item[001]:廃棄物の残渣を獲得。</li>
+                                        <li>\( 61 \sim 90 \)：item[002]:結晶化した魔那を獲得。</li>
+                                        <li>\( 91 \sim 100 \)：item[001]:異世界の残滓（レア）を獲得。</li>
+                                    </ul>
+                                </span></li>
+                                <li><span class="revert"><b>代償：</b>
+                                    var[002]:肉体安定度を\( \, -1 \, \)（屈んで作業するだけでも肉体に負荷がかかる演出）。
+                                </span></li>
+                            </span></ol>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    　地上に降り積もったガラクタの山を、手のひらの<ruby>魔那接続刻印<rt>マナ・コネクタ<!--
+                                --></rt></ruby>をセンサー代わりにして走査する作業。地上の住人には「ゴミ拾い」に見えるが、<!--
+                                -->主人公にとっては<b>「有用な原子配列の検索」</b>である。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　CE[003]：【研究】知見レベルアップの解析</summary>
+                <dd>
+                    　　合成や探索で得た「知見」が一定値に達した時の成長処理。
+                    <ul class="bulletGreen">
+                        <li><b>トリガー：</b><span class="revert">
+                            なし（知見レベルが上ったときなどに呼び出し）
+                        </span></li>
+                        <li><b>ロジック構造：</b>
+                            <ol>
+                                <li><span class="revert"><b>閾値チェック：</b>
+                                    var[004]:異世界の知見\( \, \ge \, \)次のレベルの必要値なら：
+                                    <ul>
+                                        <li>var[005]:知見レベルを\( \, +1 \, \)。</li>
+                                        <li>全能力値（魔那励起率など）を底上げ。</li>
+                                        <li>画面中央に「【解析完了】新たな術式プロトコルを承認」と表示。</li>
+                                    </ul>
+                                </span></li>
+                                <li><span class="revert"><b>SE演出：</b>“Up4”（システム的なレベルアップ音）。</span></li>
+                            </span></ol>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    　異世界の物理定数とこの世界の矛盾点を照らし合わせ、脳内の論理回路を<!--
+                                -->アップデートするプロセス。レベルアップとは「身体能力の向上」ではなく、<!--
+                                --><b>「世界をハックする精度の向上」</b>を指す。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　CE[004]：【緊急】肉体自壊</summary>
+                <dd>
+                    　　合成や探索で得た「知見」が一定値に達した時の成長処理。
+                    <ul class="bulletGreen">
+                        <li><b>トリガー：</b><span class="revert">
+                            var[002]:肉体安定度\( \, \le \, 0 \, \)の時、自動実行。
+                        </span></li>
+                        <li><b>ロジック構造：</b>
+                            <ol>
+                                <li><span class="revert"><b>入力禁止：</b>
+                                    “イベントの停止（移動・メニュー禁止）”を実行。
+                                </span></li>
+                                <li><span class="revert"><b>視覚演出Ａ：</b>
+                                    “画面の色調変更：(0, 0, 0, 255), \( 10 \)フレーム”（一瞬で真っ暗に）。
+                                </span></li>
+                                <li><span class="revert"><b>音響演出：</b>
+                                    “SE:Collapse1（低ピッチ）”または“Dull（重い衝撃音）”を再生。
+                                </span></li>
+                                <li><span class="revert"><b>視覚演出Ｂ：</b>
+                                    画面中央に大きな「紫色のノイズ（ピクチャ）」を表示。
+                                </span></li>
+                                <li><span class="revert"><b>テキスト表示：</b>
+                                    特殊な<span class="under_line">ナラティブ</span>（後述）を表示。
+                                </span></li>
+                                <li><span class="revert"><b>最終処理：</b>“ゲームオーバー”処理へ移行。
+                                    <ul class="bullet_none">
+                                        <li>
+                                            ※　開発ノート：２周目の「スライムルート」を実装する場合、ここで条件分岐し、<!--
+                                        -->データを蓄積または転生イベントマップへ。
+                                        </li>
+                                    </ul>
+                                </span></li>
+                            </span></ol>
+                        </li>
+                        <li><b>【ナラティブ】事象の記述</b>
+                            <span class="revert">
+                                　メッセージウィンドウ（背景：透明、表示：中央）で表示する、この世界の物理学的な「死」の描写。
+                            </span>
+                            <ul class="bullet_none">
+                                <li><span class="revert">
+                                    「警告：細胞間結合エネルギーが閾値を下回りました」<!--
+                                -->「……エラー。<ruby>聖天刻印<rt>ホーリー・コード</rt></ruby>、物理的損壊を確認」
+                                </span></li>
+                                <li><span class="revert">
+                                    継ぎ接ぎの肉体が、音もなく崩れていく。かつて誰かだった腕が土に帰り、<!--
+                                -->異世界の英知を詰め込んだ脳が霧散する。
+                                </span></li>
+                                <li><span class="revert">
+                                    観測者は消え、ただただ「熱力学的な死」だけがそこに残された。
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><b>【世界観設定】</b>
+                            <ul>
+                                <li><span class="revert">
+                                    <b>定義：</b>「生体的結合力の全喪失」
+                                </span></li>
+                                <li><span class="revert"><b>解説：</b>
+                                    主人公の肉体は「知見」という名の論理的な鎖で無理やり繋ぎ止められている。<!--
+                                -->肉体安定度が０になるということは、この論理の鎖が完全に破綻し、肉体が周囲の<!--
+                                -->「エントロピーの増大」に飲み込まれることを意味する。
+                                </span></li>
+                                <li><span class="revert"><b>物理的帰結：</b>
+                                    残されるのは、もはや「死体」ですらなく、ただの汚れた魔素の霧と、機能停止した<!--
+                                -->ガラクタ（<ruby>聖天刻印<rt>ホーリー・コード</rt></ruby>）の残骸のみである。
+                                </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd></details>
+        </dl>
+        <br>
+        <h2 id="four">４．【開発ノート】</h2>
+        <dl>
+            <details><summary>　変数相関定義：『三位一体の<ruby>因果環<rt>フィードバック・ループ</rt></ruby>』</summary>
+                <dd>　　この世界では、以下の３つの変数が循環し、互いに影響を与え合う。
+                    <ul class="roman">
+                        <li><b>魔那励起率（\( \, E_x \, \)）と 肉体安定度（\( \, S_p \, \)）の関係：【廃熱と負荷】</b>
+                            <br><span class="revert">　最も直接的なリスク・リターン。
+                            <ul>
+                                <li><b>熱力学的負荷（廃熱）：</b><!--
+                                -->強力な術式（高い\( \, E_x \, \)）を行使するほど、副作用として肉体に<!--
+                                -->「廃熱」が蓄積し、肉体安定度（\( \, S_p \, \)）を直接削る。
+                                    <ul class="bullet_none"><li>
+                                        >>　<b>計算式案：</b>魔法使用時の安定度減少量 \( \Delta S_p \, \propto \, (E_x)^2 \)
+                                    </li></ul>
+                                </li>
+                                <li><b>出力の不安定化（エントロピーの増大）：</b><!--
+                                -->肉体安定度が低下すると、手のひらの<ruby>魔那接続刻印<rt>マナ・コネクタ</rt></ruby>の<!--
+                                -->「制御精度」が落ちる。結果として、魔法ダメージの乱数幅が広がり、最低ダメージが出る確率が上がる。
+                                    <ul class="bullet_none"><li>
+                                        >>　<b>仕様：</b>\( S_p \, \le \, 30 \% \)の時、ダメージ分散度が\( 10 \% \)から<!--
+                                    -->\( 40 \% \)へ拡大。
+                                    </li></ul>
+                                </li>
+                            </ul>
+                        </span></li><br>
+                        <li><b>異世界の知見（\( \, L_a \, \)）と 魔那励起率（\( \, E_x \, \)）の関係：【効率と限界突破】</b>
+                            <br><span class="revert">　知見（およびLv.）は、他の変数の「質」を向上させる触媒。
+                            <ul>
+                                <li><b>変換効率の最適化：</b><!--
+                                -->知見レベル\( \, L_{vl} \, \)）が上がるほど、同じ\( \, E_x \)（魔力）を出すための<!--
+                                -->\( \Delta S_p \)（肉体負荷）が軽減される。
+                                    <ul class="bullet_none"><li>
+                                        >>　<b>仕様：</b>「より洗練された数式」を使うことで、低燃費で高出力を出せるようになる。
+                                    </li></ul>
+                                </li>
+                                <li><b>上限値の解放：</b><!--
+                                -->標準的な人類（使徒）の\( \, E_x \, \)は\( 100 \% \)が限界だが、知見レベルに応じて<!--
+                                -->このリミッターを外す「エキシードリミット」が可能になる。
+                                </li>
+                            </ul>
+                        </span></li><br>
+                        <li><b>肉体安定度（\( \, S_p \, \)）と 異世界の知見（\( \, L_a \, \)）の関係：【観測の対価】</b>
+                            <br><span class="revert">　知見（およびLv.）は、他の変数の「質」を向上させる触媒。
+                            <ul>
+                                <li><b>死地での閃き：</b><!--
+                                -->肉体安定度が低い（死に近い）状態で強敵と戦ったり、複雑な合成を試みたりすると、<!--
+                                -->得られる「知見」にボーナスが入る。
+                                    <ul class="bullet_none"><li>
+                                        >>　<b>世界観：</b>肉体が崩壊し、世界の「理」との教会が曖昧になることで、<!--
+                                    -->逆説的に真理が見えやすくなる。
+                                    </li></ul>
+                                </li>
+                            </ul>
+                        </span></li><br>
+                        <li><b>変数相互干渉表</b><span class="revert">
+                            <table><thead><tr>
+                                <th>変数Ａ</th><th>変数Ｂ</th><th>干渉の内容</th><th>世界観上の解釈</th>
+                            </tr></thead><tbody><tr>
+                                <td>魔那励起率<br>上昇↑</td><td>肉体安定度<br>低下↓</td>
+                                <td>魔法使用時に肉体安定度が即時減少する。</td>
+                                <td>魔那の過剰励起による生体組織の「焼き切れ」。</td>
+                            </tr><tr>
+                                <td>魔那励起率<br>低下↓</td><td>肉体安定度<br>低下↓</td>
+                                <td>魔法のダメージ分散（乱数幅）が増大する。</td>
+                                <td>結合力の低下により、コネクタの動機が不安定化。</td>
+                            </tr><tr>
+                                <td>知見レベル<br>上昇↑</td><td>魔那励起率<br>上昇↑</td>
+                                <td>ダメージ倍率の上限が解放される。</td>
+                                <td>物理定数のハッキング精度の向上。</td>
+                            </tr><tr>
+                                <td>知見レベル<br>上昇↑</td><td>肉体安定度<br>上昇↑</td>
+                                <td>肉体安定度の減少速度を抑える「研究」が解禁。</td>
+                                <td>効率的な生体維持プロトコルの構築。</td>
+                            </tr></tbody></table>
+                        </span></li><br>
+                        <li><b>変数相関図</b>
+                            <div class="correlation-container">
+                                <div class="node" id="node-sp">
+                                    <span class="symbol">\( S_p \)</span>
+                                    <span class="label">肉体安定度</span>
+                                </div>
+                                
+                                <div class="node" id="node-ex">
+                                    <span class="symbol">\( E_x \)</span>
+                                    <span class="label">魔那励起率</span>
+                                </div>
+                                
+                                <div class="node" id="node-la">
+                                    <span class="symbol">\( L_a \)</span>
+                                    <span class="label">異世界の知見</span>
+                                </div>
+
+                                <div class="arrow ex-sp negative">
+                                    　廃熱による崩壊　</div>
+                                <div class="arrow sp-ex warning">
+                                    　エントロピー増大（乱数化）</div>
+                                <div class="arrow la-ex positive">
+                                    　術式最適化（上限突破）</div>
+                                <div class="arrow sp-la positive">
+                                    　維持プロトコル承認　</div>
+                            </div>
+                            <style>
+                                :root {
+                                    --neg_bg: #8b0000;
+                                    --pos_bg: #006400;
+                                    --war_bg: #8b8b00;
+                                }
+
+                                .correlation-container {
+                                    position: relative;
+                                    width: 100%;
+                                    height: 555px;
+                                    background: #0d0d12; /* 深い闇 */
+                                    border: 1px solid #4a2b6d; /* 紫の境界線 */
+                                    margin: 20px 0;
+                                    overflow: hidden;
+                                }
+
+                                /* 変数ノードの基本スタイル */
+                                .node {
+                                    position: absolute;
+                                    width: 120px;
+                                    height: 120px;
+                                    border: 2px solid #8a2be2;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    background: rgba(138, 43, 226, 0.1);
+                                    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+                                }
+
+                                #node-sp { top: 40px; left: 50%; transform: translateX(-50%); }
+                                #node-ex { bottom: 40px; left: 20%; }
+                                #node-la { bottom: 40px; right: 20%; }
+
+                                .node .symbol { font-size: 32px; font-weight: bold; color: #e0d5ff; }
+                                .node .label { font-size: 14px; color: #b0a0d0; }
+
+                                /* 関係性を示すラベル（簡易版） */
+                                .arrow {
+                                    position: absolute;
+                                    font-size: 15px;
+                                    color: #d1b3ff;
+                                    background: rgba(0, 0, 0, 0.7);
+                                    padding: 4px 12px;
+                                    border: 3px solid #6a0dad;
+                                }
+
+                                /* 状態別の色分け */
+                                .negative { background: var(--neg_bg); border-bottom: 4px solid #ff0000; } /* 悪影響 */
+                                .positive { background: var(--pos_bg); border-bottom: 4px solid #00ff00; } /* 好影響 */
+                                .warning  { background: var(--war_bg); border-bottom: 4px solid #ffff00; color: #6a0dad; } /* 異常系 */
+                                
+                                /* 配置の微調整（三角形の辺に沿わせる） */
+                                .ex-sp { top: 230px; left: 28%; transform: rotate(-55deg); }
+                                .sp-ex { top: 260px; left: 28%; transform: rotate(-55deg); border-style: dashed; }
+                                .la-ex { bottom: 75px; left: 52%; transform: translateX(-50%); }
+                                .sp-la { top: 250px; left: 53%; transform: rotate(55deg); }
+                                /* 必要に応じて矢印を増やす */
+                                
+                                /* 矢印の設定 */
+                                .ex-sp::before {
+                                    content: "";
+                                    position: absolute;
+                                    width: 40px;
+                                    height: 60px;
+                                    right: -28px;
+                                    background: var(--neg_bg);
+                                    top: 0;
+                                    bottom: 0;
+                                    margin: auto;
+                                    clip-path: polygon(0 0, 100% 50%, 0% 100%, 35% 50%);
+                                }
+                                .sp-ex::before {
+                                    content: "";
+                                    position: absolute;
+                                    width: 40px;
+                                    height: 60px;
+                                    left: -28px;
+                                    background: var(--war_bg);
+                                    top: 0;
+                                    bottom: 0;
+                                    margin: auto;
+                                    clip-path: polygon(0 0, 100% 50%, 0% 100%, 35% 50%);
+                                    transform: rotate(180deg);
+                                }
+                                .la-ex::before {
+                                    content: "";
+                                    position: absolute;
+                                    width: 40px;
+                                    height: 60px;
+                                    left: -28px;
+                                    background: var(--pos_bg);
+                                    top: 0;
+                                    bottom: 0;
+                                    margin: auto;
+                                    clip-path: polygon(0 0, 100% 50%, 0% 100%, 35% 50%);
+                                    transform: rotate(180deg);
+                                }
+                                .sp-la::before {
+                                    content: "";
+                                    position: absolute;
+                                    width: 40px;
+                                    height: 60px;
+                                    right: -28px;
+                                    background: var(--pos_bg);
+                                    top: 0;
+                                    bottom: 0;
+                                    margin: auto;
+                                    clip-path: polygon(0 0, 100% 50%, 0% 100%, 35% 50%);
+                                }
+                            </style>
+                        </li>
+                    </ul>
+                </dd></details><br>
+            <details><summary>　ダメージ計算式案：『<ruby>過負荷<rt>オーバロード</rt></ruby>』</summary>
+                <dd>
+                    <ul class="bulletGreen"><li>ダメージ計算式：<span class="revert">
+                        “(a.mat * (v[3]/100)) * (0.5 + Math.random() * (v[2] < 30 ? 1.0 : 0.5))”
+                    </span></li><li>解説：<span class="revert">
+                        基本は魔那励起率（var[003]）に依存するが、肉体安定度（var[002]）が30未満になると、<!--
+                    -->ダメージが「半分になるか、倍になるか」という極端な振れ幅（ギャンブル性）を持つようになる。
+                    </span></li></ul>
+                </dd></details><br>
+            <details><summary>　合成ロジック：品質決定と「限界突破」</summary>
+                <dd>　　合成結果は、投入された素材の平均品質ベースとして、確率的に決定される。
+                    <ol class="bulletGreen"><li>
+                        <b>基本計算式</b><br><span class="revert">
+                            　投入された全素材のTierの平均値を算出する。<br><br>　　　
+                            <font size="4">
+                                \( Tier_{base} \, = \, \)
+                                <font size="5">
+                                    \( [ \frac{\sum Tier_{materials}}{N} ] \)
+                                </font></font>
+                    </span></li><br><li>
+                        <b>確率分布と「限界突破」</b><span class="revert">
+                            <ul><li>
+                                <b>通常成功：</b>\( Tier_{base} \)のアイテムが生成される。
+                            </li><li>
+                                <b>限界突破（Critical Success）：</b>
+                                <ul><li>
+                                    <b>確率：</b>\( 0.01 \% \, \sim \, 0.1 \% \)（知見レベルに依存）。
+                                </li><li>
+                                    <b>結果：</b>\( Tier_{base} \, + \, 1 \, \)のアイテムが生成される。
+                                </li><li>
+                                    <b>恩恵：</b>普段より大幅に多い合成経験値（知見）を獲得する。
+                                </li><li>
+                                    <b>制約：</b>素材の質を無視した飛躍（例：Tier１同士からTier５が生まれる等）は<!--
+                                 -->起こらず、あくまで平均の１段階上の品質に留まる。
+                                </li></ul>
+                            </li></ul>
+                    </span></li></ol>
+                </dd></details><br>
+            <details><summary>　研究・解析システム：『失敗の価値』</summary>
+                <dd>　　主人公は拠点のラボにおいて、得られたアイテムを「解析（分解）」し、<!--
+                 -->世界の物理法則に関するデータを収集（知見レベルの向上）できる。
+                    <ol class="bulletGreen"><li><b>異世界の知見 (\( \, L_a \, \)) の獲得</b><br><span class="revert">
+                        　準失敗品（Tier\( \, \)-1）は、成功品よりも「論理の矛盾（バグ）」が顕著であるため、<!--
+                        -->解析時に得られる知見が大幅に増量される。
+                        <ul><li>
+                            <b>成功品（Tier\( \, \)1～3）の解析：</b>知見\( +2 \sim +5 \)。
+                        </li><li>
+                            <b>準失敗品（Tier\( \, \)-1）の解析：</b>知見\( +5 \sim +25 \)（高効率な研究対象）。
+                        </li><li>
+                            <b>完全失敗品（汚泥）の解析：</b>知見\( +1 \)。
+                        </li></ul>
+                    </span></li><li><b>知見レベル (\( \, L_vl \, \)) による恩恵</b><br><span class="revert">
+                        <ul><li>
+                            <b>Lv.2: 安定化回路：</b>失敗率の減少。
+                        </li><li>
+                            <b>Lv.3: 逆説敵抽出法：</b>あえて準失敗品を狙って生成するモードの解禁。
+                        </li><li>
+                            <b>Lv.4: 量子確率論的介入：</b>「野の水」を「聖水」に変える超越術式、<!--
+                         -->および素材の一括ショートカット合成の解禁。
+                        </li></ul>
+                    </span></li></ol>
+                </dd></details><br>
+            <details><summary>　ゲーム進行とレシピ進化</summary>
+                <dd>　　プレイヤーが「イライラ」（ストレス）を感じないよう、工程は段階的に効率化される。
+                    <ol class="bulletGreen">
+                        <li><b>序盤（生存）：</b><br><span class="revert">
+                            　敵対する人類（教会騎士など）から「赤雫の癒し薬」などの既製品を略奪し、<!--
+                         -->それに「廃棄個体の残骸」を混ぜて「抑制剤：試作型」を生成する泥臭いサバイバル。
+                        <li><b>中盤（効率）：</b><br><span class="revert">
+                            　「聖天の雫」を自作し、それをベーズに「抑制剤：調整型」以上を安定生成。<!--
+                         -->一括合成ショートカットにより操作性が向上。
+                        <li><b>終盤（超越）：</b><br><span class="revert">
+                            　自ら「聖水」を生成。高品質な「抑制剤：完成型」や「抑制剤：超越型」を量産し、<!--
+                         -->自壊の恐怖から解放され、物理法則をハックする全能感を得る。
+                    </span></li></ol>
+                </dd></details>
+        </dl>
+
+
+
+        <br><br><br>
+        <p>
+            <a href="04char_list.html">BACK</a>　
+            <a href="00index.html">HOME</a>　
+            <a href="06glossary.html">NEXT</a>
+        </p>
+    </div>
+
+    <footer>
+        &copy; 2025 【Color-sun】 All Rights Reserved.
+    </footer>
+</body>
+</html>
